@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>NPL Evaluator</title>
+    <meta name="description" content="Evaluate a news article with Natural Language Processing">
+    <meta name="author" content="Liam McIntosh">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <div>
+      <h1>Hello World!</h1>
+      <button>Click me</button>
+    </div>
+
+
+    <script>
+      // Check that service workers are supported
+      if ('serviceWorker' in navigator) {
+        // Use the window load event to keep the page load performant
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+              // Registration was successful
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            },function(err) {
+              // registration failed :(
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+     </script>
+  </body>
+</html>

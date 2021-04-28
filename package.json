@@ -1,0 +1,55 @@
+{
+  "name": "travel-app",
+  "version": "1.0.0",
+  "description": "Udacity FEND Capstone - Travel App",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start-work": "open ./misc/Capstone.app ./misc/Capstone_Rubric.app https://github.com/liammcintosh97/Travel-App",
+    "build-prod": "webpack --config webpack.prod.js",
+    "build-dev": "webpack serve  --config webpack.dev.js --open",
+    "start": "node ./src/server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liammcintosh97/Travel-App.git"
+  },
+  "keywords": [
+    "html",
+    "javascript",
+    "css",
+    "scss",
+    "webpack",
+    "npl"
+  ],
+  "author": "Liam McIntosh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liammcintosh97/Travel-App/issues"
+  },
+  "homepage": "https://github.com/liammcintosh97/Travel-App#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "*",
+    "css-loader": "^5.2.1",
+    "html-webpack-plugin": "^5.3.1",
+    "jest": "^26.6.3",
+    "mini-css-extract-plugin": "^1.4.1",
+    "node-sass": "^5.0.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "sass-loader": "^11.0.1",
+    "style-loader": "^2.0.0",
+    "terser-webpack-plugin": "^5.1.1",
+    "webpack": "^5.32.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "workbox-webpack-plugin": "^6.1.5"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "webpack": "^5.32.0"
+  }
+}
