@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import { click } from "./js/clickMe.js";
 import "./styles/test.scss";
 
