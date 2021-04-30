@@ -29,38 +29,205 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
+let trips = [];
+
 /* Routing */
 
-app.get("/getTrip",(req,res) =>{
+//Add Data
 
+app.post("/updateTrips",(req,res)=>{
+  trips = req.trips;
+
+  for(let i = 0; i < trips.length; i++ ){
+    let tripCoords = trips[i].coordinates;
+
+    getWeatherForecast(tripCoords.lat,tripCoords.lng).then(response =>{
+      trips[i].weatherForecast = response;
+
+      for(let j = 0; i < trips[i].destinations.length; j++){
+        let tripDestinationCoords = trips[i].destinations[j].coordinates;
+
+        getWeatherForecast(tripDestinationCoords.lat,tripDestinationCoords.lng).then(response =>{
+          trips[i].destinations[j].weatherForecast = response;
+        });
+      }
+    });
+  }
+})
+
+app.post("/addTrip",(req,res) =>{
+
+  /*
   let _placeName = req.placeName;
   let _countryCode = req.country[1]
-  let _countryName = req.country[0]
+  */
+
+  let _placeName = "Paris";
+  let _countryCode = "FR";
 
   let trip = {
+    id: generateID(5),
     coordinates: {
       lat: 0,
       lng: 0
     },
     placeName: _placeName,
     placePictureURL: undefined,
-    countryCode: _countryCode,
-    countryName: _countryName,
-    weatherForecast: undefined
+    country: undefined,
+    weatherForecast: undefined,
+    destinations: [],
+    hotels: [],
+    flights: [],
+    packingList: [],
+    todoList: []
   }
 
   getPlaceLatLng(_placeName,_countryCode).then(response =>{
     trip.coordinates = response;
+
     getWeatherForecast(response.lat,response.lng).then(response =>{
       trip.weatherForecast = response;
-      getPlacePicture(_placeName).then(response =>{
-        trip.placePictureURL = response;
-        console.log(trip);
-        res.send(trip);
-      })
+
+      getCountryDetails(_countryCode).then(response =>{
+        trip.country = response;
+
+          getPlacePicture(_placeName).then(response =>{
+            trip.placePictureURL = response;
+            console.log(trip);
+            trips.push(trip)
+            res.send(trips);
+          })
+        })
     })
   })
 })
+
+app.post("/addTripDestination",(req,res) => {
+
+  let tripID = req.tripID;
+  let _placeName = req.placeName;
+  let _countryCode = trips[findObjectByID(trips,tripID)].country.alpha2Code;
+
+  let newDestination = {
+    id: generateID(5),
+    coordinates: {
+      lat: 0,
+      lng: 0
+    },
+    placeName: _placeName,
+    weatherForecast: undefined,
+  }
+
+  getPlaceLatLng(_placeName,_countryCode).then(response =>{
+    newDestination.coordinates = response;
+
+    getWeatherForecast(response.lat,response.lng).then(response =>{
+      newDestination.weatherForecast = response;
+      trips[findObjectByID(trips,tripID)].destinations.push(newDestination);
+      res.send(trips)
+    })
+  })
+})
+
+app.post("/addHotelInfo",(req,res)=>{
+
+  let hotelInfo = {
+    id: generateID(5),
+    hotelName: req.hotelName,
+    hotelAddress: req.HotelAddress,
+    checkIn: req.checkIn,
+    checkOut: req.checkOut,
+  }
+
+  trips[findTrip(req.tripID)].hotels.push(hotelInfo);
+
+  res.send(trips)
+})
+
+app.post("/addFlightInfo",(req,res)=>{
+
+  let flightInfo = {
+    id: generateID(5),
+    flightCode: req.flightCode,
+    flightDate: req.flightDate,
+    flightTime: req,flightTime,
+  }
+
+  trips[findTrip(req.tripID)].flights.push(flightInfo);
+
+  res.send(trips)
+})
+
+app.post("/addToPackingList",(req,res) =>{
+  trips[findTrip(req.tripID)].packingList.push(req.packingItem);
+  res.send(trips)
+})
+
+app.post("/addToTodoList",(req,res) =>{
+  trips[findTrip(req.tripID)].todoList.push(req.todoItem);
+  res.send(trips)
+})
+
+//Remove Data
+
+app.post("/removeTrip",(req,res)=>{
+  let toRemove = req.id;
+
+  trips.splice(findObjectByID(trips,toRemove),1);
+  res.send(trips);
+})
+
+app.post("/removeTripDestination",(req,res) =>{
+  let tripID = req.tripID;
+  let destinationID = req.destinationID;
+
+  let tripIndex = findObjectByID(trips,tripID);
+  let destinationIndex = findObjectByID(trips[tripIndex].destinations,destinationID);
+
+  trips[tripIndex].destinations.splice(destinationIndex,1)
+})
+
+app.post("/removeHotelInfo",(req,res) =>{
+  let tripID = req.tripID;
+  let hotelID = req.hotelID;
+
+  let tripIndex = findObjectByID(trips,tripID);
+  let hotelIndex = findObjectByID(trips[tripIndex].hotels,hotelID);
+
+  trips[tripIndex].hotels.splice(hotelIndex,1)
+})
+
+app.post("/removeFlightInfo",(req,res) =>{
+  let tripID = req.tripID;
+  let flightID = req.flightID;
+
+  let tripIndex = findObjectByID(trips,tripID);
+  let flightIndex = findObjectByID(trips[tripIndex].flights,flightID);
+
+  trips[tripIndex].flights.splice(flightIndex,1)
+})
+
+app.post("/removePackingListItem",(req,res) =>{
+  let tripID = req.tripID;
+  let packingItem = req.packingItem;
+
+  let tripIndex = findObjectByID(trips,tripID);
+  let packingItemIndex = findStringInArray(trips[tripIndex].packingList,packingItem);
+
+  trips[tripIndex].packingList.splice(packingItemIndex,1)
+})
+
+app.post("/removeTodoListItem",(req,res) =>{
+  let tripID = req.tripID;
+  let todoItem = req.todoItem;
+
+  let tripIndex = findObjectByID(trips,tripID);
+  let todoItemIndex = findStringInArray(trips[tripIndex].todoList,todoItem);
+
+  trips[tripIndex].todoList.splice(todoItemIndex,1)
+})
+
+//Get Data
 
 app.get("/getWeatherForecast",(req,res) =>{
 
@@ -82,11 +249,34 @@ app.get("/getCountries",(req,res)=>{
   });
 })
 
+app.get("/getTrips",(req,res) =>{
+  res.send(trips);
+})
+
 app.get("/",(req,res) =>{
   res.sendFile('index.html');
 })
 
 /* Functions */
+
+async function getCountryDetails(_countryCode){
+  let country;
+
+  let url = `https://restcountries.eu/rest/v2/alpha/${_countryCode}`
+  try{
+    await fetch(url)
+    .then((res)=>{
+      return res.json();
+    })
+    .then((data)=>{
+      country = data;
+    })
+    return country
+  }
+  catch(e){
+    return e;
+  }
+}
 
 async function getWeatherForecast(lat,lng){
 
@@ -180,7 +370,34 @@ async function getPlaceLatLng(_placeName,_countryCode){
   }
 }
 
+function findObjectByID(array,id){
+  for(let i = 0; i < array.length; i++){
+    if(array[i].id === id){
+      return i;
+    }
+  }
+}
+
+function findStringInArray(array,toFind){
+  for(let i = 0; i < array.length; i++){
+    if(array[i] === toFind){
+      return i;
+    }
+  }
+}
+
 function randomRange(min, max){
   const r = Math.random()*(max-min) + min
   return Math.floor(r)
+}
+
+function generateID(length) {
+  var result           = [];
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result.push(characters.charAt(Math.floor(Math.random() *
+charactersLength)));
+ }
+ return result.join('');
 }
