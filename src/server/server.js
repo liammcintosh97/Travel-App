@@ -10,6 +10,7 @@ var fs = require('fs');
 var https = require('https');
 var Papa = require('papaparse');
 const { response } = require('express');
+const { Console } = require('console');
 
 dotenv.config();
 
@@ -35,8 +36,13 @@ let trips = [];
 
 //Add Data
 
+app.post("/updateTrip",(req,res)=>{
+    let updated = req.body.trip;
+    trips[findObjectByID(trips,updated.id)] = updated;
+})
+
 app.post("/updateTrips",(req,res)=>{
-  trips = req.trips;
+  trips = req.body.trips;
 
   for(let i = 0; i < trips.length; i++ ){
     let tripCoords = trips[i].coordinates;
@@ -53,17 +59,13 @@ app.post("/updateTrips",(req,res)=>{
       }
     });
   }
+  res.send(trips);
 })
 
 app.post("/addTrip",(req,res) =>{
 
-  /*
-  let _placeName = req.placeName;
-  let _countryCode = req.country[1]
-  */
-
-  let _placeName = "Paris";
-  let _countryCode = "FR";
+  let _placeName = req.body.placeName;
+  let _countryCode = req.body.countryCode;
 
   let trip = {
     id: generateID(5),
@@ -93,9 +95,8 @@ app.post("/addTrip",(req,res) =>{
 
           getPlacePicture(_placeName).then(response =>{
             trip.placePictureURL = response;
-            console.log(trip);
             trips.push(trip)
-            res.send(trips);
+            res.send(trip);
           })
         })
     })
@@ -103,9 +104,10 @@ app.post("/addTrip",(req,res) =>{
 })
 
 app.post("/addTripDestination",(req,res) => {
+  console.log(`Adding destination ${req.body.placeName} to trip ID ${req.body.tripID}`)
 
-  let tripID = req.tripID;
-  let _placeName = req.placeName;
+  let tripID = req.body.tripID;
+  let _placeName = req.body.placeName;
   let _countryCode = trips[findObjectByID(trips,tripID)].country.alpha2Code;
 
   let newDestination = {
@@ -124,107 +126,135 @@ app.post("/addTripDestination",(req,res) => {
     getWeatherForecast(response.lat,response.lng).then(response =>{
       newDestination.weatherForecast = response;
       trips[findObjectByID(trips,tripID)].destinations.push(newDestination);
-      res.send(trips)
+      res.send(newDestination);
     })
   })
 })
 
-app.post("/addHotelInfo",(req,res)=>{
-
-  let hotelInfo = {
+app.post("/addTripHotel",(req,res)=>{
+  console.log(
+    `Adding hotel ${req.body.hotelName}, ${req.body.hotelAddress} to Trip ID ${req.body.tripID}
+     Check in: ${req.body.checkIn}
+     Check out: ${req.body.checkOut}`)
+  let hotel = {
     id: generateID(5),
-    hotelName: req.hotelName,
-    hotelAddress: req.HotelAddress,
-    checkIn: req.checkIn,
-    checkOut: req.checkOut,
+    hotelName: req.body.hotelName,
+    hotelAddress: req.body.hotelAddress,
+    checkIn: req.body.checkIn,
+    checkOut: req.body.checkOut,
   }
 
-  trips[findTrip(req.tripID)].hotels.push(hotelInfo);
+  trips[findObjectByID(req.body.tripID)].hotels.push(hotel);
 
-  res.send(trips)
+  res.send(hotel);
 })
 
-app.post("/addFlightInfo",(req,res)=>{
+app.post("/addTripFlight",(req,res)=>{
+  console.log(`Adding flight ${req.body.flightCode} at ${req.body.flightDate} ${req.body.flightTime} to Trip ID ${req.body.tripID}`)
 
-  let flightInfo = {
+  let flight = {
     id: generateID(5),
-    flightCode: req.flightCode,
-    flightDate: req.flightDate,
-    flightTime: req,flightTime,
+    flightCode: req.body.flightCode,
+    flightDate: req.body.flightDate,
+    flightTime: req.body.flightTime,
   }
 
-  trips[findTrip(req.tripID)].flights.push(flightInfo);
+  trips[findObjectByID(req.body.tripID)].flights.push(flight);
 
-  res.send(trips)
+  res.send(flight)
 })
 
-app.post("/addToPackingList",(req,res) =>{
-  trips[findTrip(req.tripID)].packingList.push(req.packingItem);
-  res.send(trips)
+app.post("/addToTripPackingList",(req,res) =>{
+  console.log(`Adding packing item ${req.body.item} to Trip ID ${req.body.tripID}`)
+
+  let tripID = req.body.tripID;
+  let item = req.body.item;
+
+  trips[findObjectByID(tripID)].packingList.push(item);
+  res.send({itemName: item});
 })
 
-app.post("/addToTodoList",(req,res) =>{
-  trips[findTrip(req.tripID)].todoList.push(req.todoItem);
-  res.send(trips)
+app.post("/addToTripTodoList",(req,res) =>{
+  console.log(`Adding TODO item ${req.body.item} to Trip ID ${req.body.tripID}`)
+
+  let tripID = req.body.tripID;
+  let item = req.body.item;
+
+  trips[findObjectByID(tripID)].todoList.push(item);
+  res.send({itemName: item});
 })
 
 //Remove Data
 
 app.post("/removeTrip",(req,res)=>{
-  let toRemove = req.id;
-
+  console.log(`Removing Trip ID ${req.body}`);
+  let toRemove = req.body;
   trips.splice(findObjectByID(trips,toRemove),1);
-  res.send(trips);
 })
 
 app.post("/removeTripDestination",(req,res) =>{
-  let tripID = req.tripID;
-  let destinationID = req.destinationID;
+  console.log(`Removing Destination ID ${req.body.destinationID} from Trip ID ${req.body.tripID}`);
+  let tripID = req.body.tripID;
+  let destinationID = req.body.destinationID;
+
+  console.log(`Removing destination ID ${destinationID} from trip ID ${tripID}`)
 
   let tripIndex = findObjectByID(trips,tripID);
   let destinationIndex = findObjectByID(trips[tripIndex].destinations,destinationID);
 
   trips[tripIndex].destinations.splice(destinationIndex,1)
+
+  res.send({destinationIndex: destinationIndex});
 })
 
-app.post("/removeHotelInfo",(req,res) =>{
-  let tripID = req.tripID;
-  let hotelID = req.hotelID;
+app.post("/removeTripHotel",(req,res) =>{
+  console.log(`Removing Hotel ID ${req.body.hotelID} from Trip ID ${req.body.tripID}`);
+  let tripID = req.body.tripID;
+  let hotelID = req.body.hotelID;
+
+  console.log(`Removing hotel ID ${hotelID} from Trip ID ${tripID}`);
 
   let tripIndex = findObjectByID(trips,tripID);
   let hotelIndex = findObjectByID(trips[tripIndex].hotels,hotelID);
 
   trips[tripIndex].hotels.splice(hotelIndex,1)
+  res.send({hotelIndex: hotelIndex});
 })
 
-app.post("/removeFlightInfo",(req,res) =>{
-  let tripID = req.tripID;
-  let flightID = req.flightID;
+app.post("/removeTripFlight",(req,res) =>{
+  console.log(`Removing Flight ID ${req.body.flightID} from Trip ID ${req.body.tripID}`);
+  let tripID = req.body.tripID;
+  let flightID = req.body.flightID;
 
   let tripIndex = findObjectByID(trips,tripID);
   let flightIndex = findObjectByID(trips[tripIndex].flights,flightID);
 
   trips[tripIndex].flights.splice(flightIndex,1)
+  res.send({flightIndex: flightIndex});
 })
 
-app.post("/removePackingListItem",(req,res) =>{
-  let tripID = req.tripID;
-  let packingItem = req.packingItem;
+app.post("/removeTripPackingListItem",(req,res) =>{
+  console.log(`Removing Packing Item ${req.body.item} from Trip ID ${req.body.tripID}`);
+  let tripID = req.body.tripID;
+  let packingItem = req.body.item;
 
   let tripIndex = findObjectByID(trips,tripID);
   let packingItemIndex = findStringInArray(trips[tripIndex].packingList,packingItem);
 
   trips[tripIndex].packingList.splice(packingItemIndex,1)
+  res.send({index: packingItemIndex});
 })
 
 app.post("/removeTodoListItem",(req,res) =>{
-  let tripID = req.tripID;
-  let todoItem = req.todoItem;
+  console.log(`Removing TODO Item ${req.body.item} from Trip ID ${req.body.tripID}`);
+  let tripID = req.body.tripID;
+  let todoItem = req.body.item;
 
   let tripIndex = findObjectByID(trips,tripID);
   let todoItemIndex = findStringInArray(trips[tripIndex].todoList,todoItem);
 
   trips[tripIndex].todoList.splice(todoItemIndex,1)
+  res.send({index: todoItemIndex});
 })
 
 //Get Data
@@ -334,7 +364,7 @@ async function getPlaceLatLng(_placeName,_countryCode){
   let paramsURL = `?placename=${_placeName}&maxRows=10&country=${_countryCode}&countryBias=${_countryCode}&username=liam6499`
 
   try{
-    await fetch(baseURL + paramsURL)
+    await fetch(encodeURI(baseURL + paramsURL))
     .then((res)=>{
       return res.json();
     })

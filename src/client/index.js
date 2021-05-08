@@ -1,5 +1,7 @@
-import fetch from "node-fetch";
-import { click } from "./js/clickMe.js";
-import "./styles/test.scss";
+import { start } from "./js/application"
 
-document.getElementsByTagName("button")[0].addEventListener("click",click);
+start()
+
+export {
+  start,
+}

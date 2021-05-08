@@ -4,7 +4,7 @@
  --- APIs Used ---
 
    - Geonames: https://www.geonames.org/
-   - Open Weather: https://openweathermap.org/
+   - REST Countries API: https://restcountries.eu/
    - Weather Bit: https://www.weatherbit.io/
    - PixaBay: https://pixabay.com/
 
