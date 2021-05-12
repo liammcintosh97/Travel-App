@@ -8,8 +8,12 @@ export default class Communicator{
     const response = await fetch(url,{
       method: 'POST',
       credentials: 'same-origin',
+      mode: 'cors',
       headers:{
         'Content-Type': 'application/json',
+        'Origin':'http://localhost:8080',
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'Content-Type, Authorization'
       },
       body: JSON.stringify(data),
     });
@@ -29,8 +33,12 @@ export default class Communicator{
     const response = await fetch(url,{
       method: 'GET',
       credentials: 'same-origin',
+      mode: 'cors',
       headers:{
         'Content-Type': 'application/json',
+        'Origin':'http://localhost:8080',
+        'Access-Control-Request-Method': 'GET',
+        'Access-Control-Request-Headers': 'Content-Type, Authorization'
       },
       body: JSON.stringify(data),
     });

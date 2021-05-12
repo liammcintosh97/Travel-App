@@ -6,10 +6,29 @@
     <meta name="description" content="Enter your destination and departure date and receive a weather forecast of your trip!">
     <meta name="author" content="Liam McIntosh">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
-
   </head>
   <body>
+    <header>
+      <h1>Travel Planner</h1>
+      <p>Enter a country to start planing your trip!</p>
+    </header>
+    <main>
+
+      <div class="sub-heading">
+        <div class="trip-form">
+          <div class="country-selector">
+            <input type="text" placeholder="Search.." class="country-selector-input">
+            <div class="country-selector-content"></div>
+          </div>
+          <button>Add Trip</button>
+        </div>
+        <button class="save-button">Save</button>
+      </div>
+
+      <div class ="trip-container">
+
+      </div>
+    </main>
 
     <script>
       // Check that service workers are supported

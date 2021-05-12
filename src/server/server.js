@@ -28,7 +28,14 @@ app.use(express.static("dist"))
 /* Middleware */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+
+let corsOptions = {
+  origin: 'http://localhost:8080',
+  methods: ['GET','POST','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}
+app.use(cors(corsOptions));
 
 let trips = [];
 
@@ -187,9 +194,10 @@ app.post("/addToTripTodoList",(req,res) =>{
 //Remove Data
 
 app.post("/removeTrip",(req,res)=>{
-  console.log(`Removing Trip ID ${req.body}`);
-  let toRemove = req.body;
+  console.log(`Removing Trip ID ${req.body.id}`);
+  let toRemove = req.body.id;
   trips.splice(findObjectByID(trips,toRemove),1);
+  res.send({trips: trips});
 })
 
 app.post("/removeTripDestination",(req,res) =>{
@@ -344,7 +352,7 @@ async function getPlacePicture(_placeName,_countryName){
       return res.json();
     })
     .then((data)=>{
-      placePictureURL = data.hits[randomRange(0,data.hits.length)].pageURL;
+      placePictureURL = data.hits[randomRange(0,data.hits.length)].largeImageURL;
     })
     return placePictureURL
   }

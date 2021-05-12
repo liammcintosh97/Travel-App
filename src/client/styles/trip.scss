@@ -1,0 +1,89 @@
+.trip{
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-rows: 10% 40% 15% 30%;
+  grid-template-areas:
+  "trip-hd trip-hd trip-hd trip-hd"
+  "trip-pc trip-pc trip-dt trip-dt"
+  "trip-wh trip-wh trip-ht trip-fl"
+  "trip-pk trip-td trip-ht trip-fl";
+  gap: 5px;
+  height: calc(100% - 10px);
+  width: 100%;
+  background-color: grey;
+  border: solid 2px grey;
+  border-radius: 2px;
+  margin: 5px;
+  padding: 5px;
+
+  > *{
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    border: solid 2x transparent;
+    border-radius: 2px;
+    background-color: white;
+  }
+
+  >h2{
+    margin: 0px;
+  }
+}
+
+.trip-image{
+  grid-area: trip-pc;
+  object-fit: cover;
+}
+
+.destinations{
+  grid-area: trip-dt;
+}
+
+.weather{
+  grid-area: trip-wh;
+}
+
+.packingList{
+  grid-area: trip-pk;
+}
+
+.todoList{
+  grid-area: trip-td;
+}
+
+.hotels{
+  grid-area: trip-ht;
+}
+
+.flights{
+  grid-area: trip-fl;
+}
+
+.trip-header{
+  grid-area: trip-hd;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: unset;
+
+  button{
+    align-self: center;
+  }
+}
+
+.trip-name{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  >img{
+    border: solid 2x transparent;
+    border-radius: 2px;
+    height: 50%;
+    margin-left: 5px;
+  }
+}

@@ -1,0 +1,58 @@
+body,html {
+    margin: 0;
+    padding: 0;
+}
+* {
+    box-sizing: border-box;
+}
+
+body{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 100vw;
+  grid-template-rows: 15vh 85vh;
+  grid-template-areas:
+  "hd"
+  "mn";
+}
+
+header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  grid-area: hd;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+  grid-area: mn;
+}
+
+.sub-heading{
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+
+  .save-button{
+    align-self: end;
+    height: 47px;
+    margin: 5px 2.5px 5px 2.5px;
+  }
+}
+
+.trip-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 5px;
+  border: solid 1px grey;
+  border-radius: 2px;
+  flex-grow: 1;
+  overflow: scroll;
+  justify-content: space-evenly;
+}

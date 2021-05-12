@@ -1,4 +1,4 @@
-function findObjectByID(array,id){
+export function findObjectByID(array,id){
   for(let i = 0; i < array.length; i++){
     if(array[i].id === id){
       return i;
@@ -14,7 +14,13 @@ function findStringInArray(array,toFind){
   }
 }
 
+function validateString(string){
+  if(string === "" || string === null || string === undefinded);
+  return true
+}
+
 export default{
   findObjectByID,
-  findStringInArray
+  findStringInArray,
+  validateString,
 }

@@ -1,4 +1,4 @@
-import findObjectByID from "./utility"
+import {findObjectByID} from "./utility"
 import Communicator from "./communicator";
 import Trip from "./trip";
 const regeneratorRuntime = require("regenerator-runtime");
@@ -27,11 +27,23 @@ export default class TripManager{
     this.trips.push(newTrip);
   }
 
-  removeTrip(_id){
+  async removeTrip(document,_id){
+    let tripElements = document.getElementsByClassName("trip");
 
-    this.communicator.Post("http://localhost:3033/removeTrip",_id).then(data =>{
-      this.trips = data;
+    for(let i=0; i < tripElements.length;i++){
+      if(tripElements[i].id === _id) tripElements[i].remove();
+    }
+
+    let toRemove = {
+      id: _id,
+    }
+
+    return await this.communicator.Post("http://localhost:3033/removeTrip",toRemove).then(data =>{
+
       this.trips.splice(findObjectByID(this.trips,_id),1);
+      this.trips = data.trips;
+
+      return;
     })
   }
 
@@ -54,12 +66,12 @@ export default class TripManager{
       return
     }
 
-    await this.communicator.Post("http://localhost:3033/updateTrips",tripsData).then(data =>{
+    return await this.communicator.Post("http://localhost:3033/updateTrips",tripsData).then(data =>{
 
       for(let i = 0; i < data.length;i++){
         this.addSavedTrip(data[i]);
       }
-      return;
+      return this.trips;
     })
   }
 
