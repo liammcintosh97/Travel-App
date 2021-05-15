@@ -11,7 +11,7 @@ body{
   height: 100vh;
   display: grid;
   grid-template-columns: 100vw;
-  grid-template-rows: 15vh 85vh;
+  grid-template-rows: 10vh 90vh;
   grid-template-areas:
   "hd"
   "mn";
@@ -20,9 +20,18 @@ body{
 header{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   grid-area: hd;
+  padding: 5px;
+
+  >h1{
+    margin: 0px;
+    margin-bottom: 5px;
+  }
+  >p{
+    margin: 0px;
+  }
 }
 
 main{
@@ -37,12 +46,6 @@ main{
   flex-direction: row;
   justify-content: center;
   align-content: center;
-
-  .save-button{
-    align-self: end;
-    height: 47px;
-    margin: 5px 2.5px 5px 2.5px;
-  }
 }
 
 .trip-container{
@@ -53,6 +56,8 @@ main{
   border: solid 1px grey;
   border-radius: 2px;
   flex-grow: 1;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   justify-content: space-evenly;
+  align-items: center;
 }

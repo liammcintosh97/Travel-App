@@ -1,0 +1,37 @@
+.todoList{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+  "todo-header"
+  "todo-content";
+}
+
+.todo-header{
+  grid-area: todo-header;
+  margin:5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  h3{
+    padding: 0px;
+    margin: 0px
+  }
+  button{
+    margin: 0px;
+  }
+}
+
+.todo-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.todo-content{
+  grid-area: todo-content;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

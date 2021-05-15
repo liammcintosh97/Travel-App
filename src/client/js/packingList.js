@@ -1,4 +1,4 @@
-import findStringInArray from "./utility"
+import {findStringInArray} from "./utility"
 import Communicator from "./communicator";
 const regeneratorRuntime = require("regenerator-runtime");
 
@@ -9,29 +9,73 @@ export default class PackingListManager{
     this.communicator = new Communicator();
   }
 
-  async add(item){
-    console.log(`Adding packing item ${item} to Trip ID ${this.tripID}`);
+  init(document){
+    let packingInput = document.getElementsByClassName("packing-input")[0];
+    let packingButton = document.getElementsByClassName("packing-button")[0];
+    let packingContent = document.getElementsByClassName("packing-content")[0];
 
-    let newItem = {
-      tripID: this.tripID,
-      item: item,
-    }
-    return await this.communicator.Post("http://localhost:3033/addToTripPackingList",newItem).then(data =>{
-      this.packingList.push(data.itemName);
-      return data;
-    })
+    this.load(packingContent);
+
+    const buttonClick = this.onEnterClick.bind(null,this,packingContent,packingInput);
+    packingButton.addEventListener("click",buttonClick);
   }
 
-  async remove(_item){
-    console.log(`Removing packing item ${_item} from Trip ID ${this.tripID}`);
+  load(packingContent){
+    let packingList = this.packingList;
 
-    let requestData = {
-      tripID: this.tripID,
-      item: _item
+    for(var i = 0 ; i < packingList.length; i++){
+      var itemElement = this.insert(packingContent,packingList[i].item)
+      var checkBox = itemElement.getElementsByTagName("input")[0];
+
+      checkBox.checked = packingList[i].checked;
     }
-    return await this.communicator.Post("http://localhost:3033/removeTripPackingListItem",requestData).then(item =>{
-      this.packingList.splice(item.index,1);
-      return;
-    })
   }
+
+  insert(content,item){
+    var htmlString = `
+    <div class="packing-item">
+      <input type="checkbox">
+      <p>${item}</p>
+      <button class="packing-item-remove">X</button>
+    </div>`
+    content.insertAdjacentHTML("afterbegin",htmlString);
+    var itemElement = content.firstChild.nextSibling;
+
+    var checkBox = itemElement.getElementsByTagName("input")[0];
+    var removeButton = itemElement.getElementsByClassName("packing-item-remove")[0];
+
+    var onCheck = this.onCheck.bind(null,this,item)
+    var onRemove = this.onRemove.bind(null,this,item)
+
+    checkBox.addEventListener("change",onCheck)
+    removeButton.addEventListener("click",onRemove)
+
+    return itemElement
+  }
+
+  onEnterClick(manager,content,input,event){
+    manager.packingList.push({item: input.value,checked: false});
+    manager.insert(content,input.value);
+  }
+
+  onCheck(manager,item,event){
+    var itemIndex = 0;
+    for(var i = 0; i < manager.packingList.length; i++){
+      if(manager.packingList[i].item === item) itemIndex = i;
+    }
+    manager.packingList[itemIndex].checked = event.target.checked
+  }
+
+  onRemove(manager,item,event){
+    var element = event.target.parentElement;
+
+    element.remove();
+
+    var itemIndex = 0;
+    for(var i = 0; i < manager.packingList.length; i++){
+      if(manager.packingList[i].item === item) itemIndex = i;
+    }
+    manager.packingList.splice(itemIndex,1);
+  }
+
 }

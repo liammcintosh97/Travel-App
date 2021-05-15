@@ -1,7 +1,7 @@
 .trip{
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: 10% 40% 15% 30%;
+  grid-template-columns: 24% 25% 25% 25%;
+  grid-template-rows: 5% 40% 15% 38%;
   grid-template-areas:
   "trip-hd trip-hd trip-hd trip-hd"
   "trip-pc trip-pc trip-dt trip-dt"
@@ -20,7 +20,7 @@
     height: 100%;
     width: 100%;
     padding: 5px;
-    border: solid 2x transparent;
+    border: solid 2x white;
     border-radius: 2px;
     background-color: white;
   }

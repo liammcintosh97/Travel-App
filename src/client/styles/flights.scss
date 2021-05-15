@@ -1,0 +1,70 @@
+.flights{
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 30% 70%;
+  grid-template-areas:
+  "flights-header"
+  "flights-content";
+}
+
+.flights-content{
+  height: auto;
+  grid-area: flights-content;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.flights-header{
+  grid-area: flights-header;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 30% 70%;
+  grid-template-areas:
+  "flights-title flights-code"
+  "flights-departure flights-departure";
+  align-items: center;
+
+  >*{
+    margin: 5px;
+  }
+}
+
+.flights-title{
+  grid-area: flights-title;
+  margin: 0px;
+  padding-left: 5px;
+}
+
+.flights-code-input{
+  margin: 0px;
+  padding: 0px;
+  grid-area: flights-code;
+}
+
+.flights-departure{
+  grid-area: flights-departure;
+  width: 100%;
+
+  >p{
+    margin: 0px;
+  }
+}
+
+.flights-enter{
+  margin-top: 10px;
+  width: 100%;
+}
+.flights-departure-datetime{
+  width: 100%;
+}
+
+.flight{
+  margin: 5px 10px 5px 5px;
+  border: solid 2px grey;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+
+

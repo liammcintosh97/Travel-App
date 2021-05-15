@@ -1,5 +1,6 @@
 import findObjectByID from "./utility"
 import Communicator from "./communicator";
+import {generateID} from "./utility";
 const regeneratorRuntime = require("regenerator-runtime");
 
 export default class FlightManager{
@@ -9,30 +10,70 @@ export default class FlightManager{
     this.communicator = new Communicator();
   }
 
-  async add(_flightCode,_flightDate,_flightTime){
-    console.log(`Adding flight ${_flightCode} at ${_flightDate} ${_flightTime} to Trip ID ${this.tripID}`)
+  init(document){
 
-    let flight = {
-      tripID: this.tripID,
-      flightCode: _flightCode,
-      flightDate: _flightDate,
-      flightTime: _flightTime,
+    var flightContent = document.getElementsByClassName("flights-content")[0];
+    var enterButton = document.getElementsByClassName("flights-enter")[0];
+
+    var inputs = {
+      codeInput: document.getElementsByClassName("flights-code-input")[0],
+      departureDateTimeInput: document.getElementsByClassName("flights-departure-datetime")[0],
     }
 
-    return await this.communicator.Post("http://localhost:3033/addTripFlight",flight).then(data =>{
-      this.flights.push(data);
-      return data;
-    })
+    this.load(flightContent);
+
+    const buttonClick = this.onEnterClick.bind(null,this,flightContent,inputs);
+    enterButton.addEventListener("click",buttonClick);
   }
 
-  async remove(_flightID){
-    let requestData = {
-      tripID: this.tripID,
-      flightID: _flightID
+  load(flightContent){
+    let flights = this.flights;
+
+    for(var i = 0 ; i < flights.length; i++){
+      this.insert(flightContent,flights[i])
     }
-    return await this.communicator.Post("http://localhost:3033/removeTripFlight",requestData).then(data =>{
-      this.flights.splice(data.flightIndex,1);
-      return;
-    })
+  }
+
+  insert(content,flight){
+    var htmlString = `
+    <div class="flight">
+      <div class="flight-info">
+        <p>Flight code: ${flight.code}</p>
+        <p>Flight departure: ${flight.departure}</p>
+      </div>
+      <button class="flight-remove">X</button>
+    </div>`
+    content.insertAdjacentHTML("afterbegin",htmlString);
+    var itemElement = content.firstChild.nextSibling;
+
+    var removeButton = itemElement.getElementsByClassName("flight-remove")[0];
+
+    var onRemoveClick = this.onRemoveClick.bind(null,this,flight.id)
+
+    removeButton.addEventListener("click",onRemoveClick)
+
+    return itemElement
+  }
+
+  onEnterClick(manager,content,inputs){
+    var newFlight = {
+      id: generateID(5),
+      code: inputs.codeInput.value,
+      departure: inputs.departureDateTimeInput.value,
+    }
+    manager.flights.push(newFlight);
+    manager.insert(content,newFlight);
+  }
+
+  onRemoveClick(manager,flightID,event){
+    var element = event.target.parentElement;
+
+    element.remove();
+
+    var itemIndex = 0;
+    for(var i = 0; i < manager.flights.length; i++){
+      if(manager.flights[i].id === flightID) itemIndex = i;
+    }
+    manager.flights.splice(flightID,1);
   }
 }

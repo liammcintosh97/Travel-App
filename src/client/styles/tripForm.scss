@@ -1,6 +1,4 @@
 .trip-form{
-  align-self: center;
-  justify-self: flex-end;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -12,6 +10,20 @@
   }
 
   .country-selector{
+    margin: 5px 2.5px 5px 2.5px;
+  }
+}
+
+.form-dates{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  input{
+    padding: 14px 20px 12px 0px;
+    font-size: 16px;
+    height: 47px;
     margin: 5px 2.5px 5px 2.5px;
   }
 }

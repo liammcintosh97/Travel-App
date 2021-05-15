@@ -9,10 +9,12 @@ export default class TripManager{
     this.communicator = new Communicator();
   }
 
-  async addTrip(_placeName,_countryCode){
+  async addTrip(_placeName,_countryCode,_fromDate,_toDate){
     let newTrip = {
       placeName: _placeName,
-      countryCode: _countryCode
+      countryCode: _countryCode,
+      fromDate: _fromDate,
+      toDate: _toDate,
     }
     return await this.communicator.Post("http://localhost:3033/addTrip",newTrip).then(data =>{
 
@@ -34,20 +36,11 @@ export default class TripManager{
       if(tripElements[i].id === _id) tripElements[i].remove();
     }
 
-    let toRemove = {
-      id: _id,
-    }
-
-    return await this.communicator.Post("http://localhost:3033/removeTrip",toRemove).then(data =>{
-
-      this.trips.splice(findObjectByID(this.trips,_id),1);
-      this.trips = data.trips;
-
-      return;
-    })
+    this.trips.splice(findObjectByID(this.trips,_id),1);
   }
 
   save(){
+    console.log(this.trips)
     let tripsData ={
       trips: []
     };

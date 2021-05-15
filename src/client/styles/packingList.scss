@@ -1,0 +1,38 @@
+.packingList{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+  "packing-header"
+  "packing-content";
+}
+
+.packing-header{
+  grid-area: packing-header;
+  margin:5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  h3{
+    padding: 0px;
+    margin: 0px
+  }
+  button{
+    margin: 0px;
+  }
+}
+
+.packing-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 10px 5px 5px;
+}
+
+.packing-content{
+  grid-area: packing-content;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

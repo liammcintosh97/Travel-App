@@ -17,6 +17,7 @@ function start(){
 
   tripManager.load().then(trips =>{
     console.log(trips);
+    if(trips === null || trips === undefined) return;
     for(let i = 0; i < trips.length; i++){
       trips[i].insert(document,tripContainer);
       trips[i].removeButton.addEventListener("click",()=>{
@@ -28,14 +29,17 @@ function start(){
 
 function onAddTripClick(){
   let country = countrySearcher.selectedCountry
+  let fromDate = document.getElementsByClassName("from-date")[0];
+  let toDate = document.getElementsByClassName("to-date")[0];
 
   if(country === undefined){
     alert("Please select a country");
     return;
   }
 
-  tripManager.addTrip(country.name,country.code).then((trip) =>{
+  tripManager.addTrip(country.name,country.code,fromDate.value,toDate.value).then((trip) =>{
     let tripContainer = document.getElementsByClassName("trip-container")[0];
+    console.log(trip);
     trip.insert(document,tripContainer);
     trip.removeButton.addEventListener("click",()=>{
       tripManager.removeTrip(document,trip.data.id);
