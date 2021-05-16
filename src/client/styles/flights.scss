@@ -1,7 +1,7 @@
 .flights{
   flex-grow: 1;
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: 100%;
   grid-template-rows: 30% 70%;
   grid-template-areas:
   "flights-header"
@@ -18,8 +18,8 @@
 .flights-header{
   grid-area: flights-header;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 30% 70%;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 20% 80%;
   grid-template-areas:
   "flights-title flights-code"
   "flights-departure flights-departure";
@@ -37,6 +37,7 @@
 }
 
 .flights-code-input{
+  width: calc(100% - 10px);
   margin: 0px;
   padding: 0px;
   grid-area: flights-code;
@@ -53,10 +54,10 @@
 
 .flights-enter{
   margin-top: 10px;
-  width: 100%;
+  width: calc(100% - 10px);
 }
 .flights-departure-datetime{
-  width: 100%;
+  width: calc(100% - 10px);
 }
 
 .flight{

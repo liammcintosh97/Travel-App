@@ -28,7 +28,10 @@ export default class Trip{
           <h2>${this.data.country.name}</h2>
           <img src="${this.data.country.flag}" alt="The ${this.data.country.name} flag">
         </div>
-        <p><strong>From:</strong> ${this.data.fromDate} <strong>To:</strong> ${this.data.toDate}</p>
+        <div class="trip-dates">
+          <p><strong>From:</strong> ${this.data.fromDate}</p>
+          <p><strong>To:</strong> ${this.data.toDate}</p>
+        </div>
         <button class="trip-remove-button">X</button>
       </div>
       <img class="trip-image" src="${this.data.placePictureURL}" alt="A picture of ${this.data.country.name}">

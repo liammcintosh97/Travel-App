@@ -1,4 +1,5 @@
 .trip-form{
+  width:auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -14,6 +15,13 @@
   }
 }
 
+.form-buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .form-dates{
   display: flex;
   flex-direction: row;
@@ -25,5 +33,44 @@
     font-size: 16px;
     height: 47px;
     margin: 5px 2.5px 5px 2.5px;
+  }
+  div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 900px) and (min-width: 500px){
+
+  .trip-form{
+    flex-direction: column;
+  }
+
+  .country-selector{
+    width: 100%;
+  }
+
+  .add-trip-button{
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 500px){
+
+  .trip-form{
+    flex-direction: column;
+  }
+
+  .country-selector{
+    width: 100%;
+  }
+
+  .add-trip-button{
+    width: 100%;
+  }
+
+  .form-dates{
+    flex-direction: column;
   }
 }

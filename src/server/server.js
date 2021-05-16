@@ -11,6 +11,7 @@ var https = require('https');
 var Papa = require('papaparse');
 const { response } = require('express');
 const { Console } = require('console');
+const regeneratorRuntime = require("regenerator-runtime");
 
 dotenv.config();
 
@@ -41,19 +42,19 @@ app.use(cors(corsOptions));
 
 //Add Data
 
-app.post("/updateTrips",(req,res)=>{
+app.post("/updateTrips",async (req,res)=>{
   var trips = req.body.trips;
 
   for(let i = 0; i < trips.length; i++ ){
     let tripCoords = trips[i].coordinates;
 
-    getWeatherForecast(tripCoords.lat,tripCoords.lng).then(response =>{
+    await getWeatherForecast(tripCoords.lat,tripCoords.lng).then(async response =>{
       trips[i].weatherForecast = response;
 
       for(let j = 0; j < trips[i].destinations.length; j++){
         let tripDestinationCoords = trips[i].destinations[j].coordinates;
 
-        getWeatherForecast(tripDestinationCoords.lat,tripDestinationCoords.lng).then(response =>{
+       await getWeatherForecast(tripDestinationCoords.lat,tripDestinationCoords.lng).then(response =>{
           trips[i].destinations[j].weatherForecast = response;
         });
       }
@@ -286,3 +287,5 @@ charactersLength)));
  }
  return result.join('');
 }
+
+module.exports.generateID = generateID;

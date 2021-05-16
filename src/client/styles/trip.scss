@@ -9,16 +9,14 @@
   "trip-pk trip-td trip-ht trip-fl";
   gap: 5px;
   height: calc(100% - 10px);
-  width: 100%;
+  width: calc(100% - 20px);
   background-color: grey;
   border: solid 2px grey;
   border-radius: 2px;
-  margin: 5px;
+  margin: 5px 15px 5px 5px;
   padding: 5px;
 
   > *{
-    height: 100%;
-    width: 100%;
     padding: 5px;
     border: solid 2x white;
     border-radius: 2px;
@@ -31,6 +29,8 @@
 }
 
 .trip-image{
+  width: 100%;
+  height: 100%;
   grid-area: trip-pc;
   object-fit: cover;
 }
@@ -71,6 +71,15 @@
   button{
     align-self: center;
   }
+
+}
+
+.trip-dates{
+  display: flex;
+  flex-direction: row;
+  p{
+    margin-left: 0.5em;
+  }
 }
 
 .trip-name{
@@ -85,5 +94,62 @@
     border-radius: 2px;
     height: 50%;
     margin-left: 5px;
+  }
+}
+
+@media only screen and (max-width: 1400px) and (min-width: 700px) {
+  .trip{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 3% 30% 10% 20% 35%;
+    grid-template-areas:
+    "trip-hd trip-hd trip-hd trip-hd"
+    "trip-pc trip-pc trip-dt trip-dt"
+    "trip-wh trip-wh trip-wh trip-wh"
+    "trip-pk trip-pk trip-td trip-td"
+    "trip-ht trip-ht trip-fl trip-fl";
+    height: calc(150% - 10px);
+  }
+}
+
+@media only screen and (max-width: 700px) and (min-width: 500px) {
+  .trip{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 2% 25% 20% 5% 10% 18% 18% ;
+    grid-template-areas:
+    "trip-hd trip-hd"
+    "trip-pc trip-pc"
+    "trip-dt trip-dt"
+    "trip-wh trip-wh"
+    "trip-pk trip-td"
+    "trip-ht trip-ht"
+    "trip-fl trip-fl";
+    height: calc(300% - 10px);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .trip{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 3% 15% 5% 20% 15% 20% 20% ;
+    grid-template-areas:
+    "trip-hd trip-hd"
+    "trip-pc trip-pc"
+    "trip-wh trip-wh"
+    "trip-dt trip-dt"
+    "trip-pk trip-td"
+    "trip-ht trip-ht"
+    "trip-fl trip-fl";
+    height: calc(300% - 10px);
+  }
+
+  .trip-dates{
+    flex-direction: column;
+    p{
+      font-size: smaller;
+      margin: 0px;
+    }
   }
 }

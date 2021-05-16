@@ -14,8 +14,8 @@ export function findStringInArray(array,toFind){
   }
 }
 
-function validateString(string){
-  if(string === "" || string === null || string === undefinded);
+export function validateString(string){
+  if(string === "" || string === null || string === undefined) return false;
   return true
 }
 

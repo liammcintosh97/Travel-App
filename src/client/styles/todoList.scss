@@ -1,7 +1,7 @@
 .todoList{
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: 100%;
+  grid-template-rows: 30% 70%;
   grid-template-areas:
   "todo-header"
   "todo-content";
@@ -16,11 +16,15 @@
   align-items: center;
 
   h3{
+    width: auto;
     padding: 0px;
     margin: 0px
   }
   button{
     margin: 0px;
+  }
+  div{
+    width: 100%;
   }
 }
 
@@ -34,4 +38,27 @@
   grid-area: todo-content;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+
+@media only screen and (max-width: 700px) and (min-width: 400px)  {
+  .todo-header{
+    flex-direction: column;
+
+    div{
+      margin-top: 5px;
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .todo-header{
+    flex-direction: column;
+    div{
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
