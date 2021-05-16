@@ -11,22 +11,26 @@ export default class CountrySearcher{
   }
 
   async init(){
+    //Initializes the country selector
     await this.initCountries()
 
+    //Bind listener functions
     const inputClick = this.toggleContent.bind(null,this.content);
     const inputKeyUp = this.filterCountries.bind(null,this.countries);
     const contentClick = this.onCountryClick.bind(null,this,this.input);
 
+    //Add event listeners
     this.input.addEventListener('click',inputClick);
     this.input.addEventListener('keyup',inputKeyUp);
     this.content.addEventListener('click',contentClick)
   }
 
   async initCountries(){
+    //Get a list of countries from the server
     return await this.communicator.Get("http://localhost:3033/getCountries").then(countries =>{
       
+      //loop through the returned country data and insert it into the searchable dropdown
       for(var i = 0;i < countries.length; i++){
-        //var htmlString = `<a id="${countries[i][1]}" href="#${countries[i][0]}">${countries[i][0]}</a>`
         var htmlString = `<a id="${countries[i][1]}">${countries[i][0]}</a>`
         this.content.insertAdjacentHTML("beforeend",htmlString);
       }
@@ -37,7 +41,7 @@ export default class CountrySearcher{
   }
 
   toggleContent(content,event) {
-
+    //Toggles the dropdown's display
     if (content.style.display === "none" || content.style.display === "") {
       content.style.display = "block";
     } else {
@@ -46,6 +50,7 @@ export default class CountrySearcher{
   }
 
   showContent(show){
+    //Shows the dropdown's display based on the passed boolean
     if (show) {
       this.content.style.display = "block";
     } else {
@@ -54,6 +59,7 @@ export default class CountrySearcher{
   }
 
   onCountryClick(countrySearcher,input,event){
+    //Formats the country selector's input once the user clicks on a country
     var clickedCountry = event.target;
 
     input.value = clickedCountry.innerText;
@@ -66,6 +72,7 @@ export default class CountrySearcher{
   }
 
   filterCountries(countries,event) {
+    //Filters through the countries in the dropdown when the users types in the input
     var input = event.target;
     var filter = input.value.toUpperCase();
     

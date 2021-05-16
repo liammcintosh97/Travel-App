@@ -11,17 +11,20 @@ export default class FlightManager{
   }
 
   init(document){
-
+    //Initializes elements
     var flightContent = document.getElementsByClassName("flights-content")[0];
     var enterButton = document.getElementsByClassName("flights-enter")[0];
 
+    //Gathers all required inputs
     var inputs = {
       codeInput: document.getElementsByClassName("flights-code-input")[0],
       departureDateTimeInput: document.getElementsByClassName("flights-departure-datetime")[0],
     }
 
+    //Load saved flights
     this.load(flightContent);
 
+    //initialize buttons
     const buttonClick = this.onEnterClick.bind(null,this,flightContent,inputs);
     enterButton.addEventListener("click",buttonClick);
   }
@@ -29,12 +32,14 @@ export default class FlightManager{
   load(flightContent){
     let flights = this.flights;
 
+    //loop through current flights and insert into the document
     for(var i = 0 ; i < flights.length; i++){
       this.insert(flightContent,flights[i])
     }
   }
 
   insert(content,flight){
+    //inserts a new flight into the document
     var htmlString = `
     <div class="flight">
       <div class="flight-info">
@@ -43,19 +48,20 @@ export default class FlightManager{
       </div>
       <button class="flight-remove">X</button>
     </div>`
+    //Get new Element
     content.insertAdjacentHTML("afterbegin",htmlString);
     var itemElement = content.firstChild.nextSibling;
 
+    //Init remove button
     var removeButton = itemElement.getElementsByClassName("flight-remove")[0];
-
     var onRemoveClick = this.onRemoveClick.bind(null,this,flight.id)
-
     removeButton.addEventListener("click",onRemoveClick)
 
     return itemElement
   }
 
   onEnterClick(manager,content,inputs){
+    //Creates a new flight upon clicking the enter upon
     var newFlight = {
       id: generateID(5),
       code: inputs.codeInput.value,
@@ -66,6 +72,7 @@ export default class FlightManager{
   }
 
   onRemoveClick(manager,flightID,event){
+     //Removes a  flight upon clicking it's remove button
     var element = event.target.parentElement;
 
     element.remove();

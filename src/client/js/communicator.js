@@ -3,6 +3,7 @@ const regeneratorRuntime = require("regenerator-runtime");
 export default class Communicator{
 
   async  Post(url,data){
+    //Makes a post request to the passed url with the passed data
     console.log(`Posting to: ${url}`);
 
     const response = await fetch(url,{
@@ -21,6 +22,7 @@ export default class Communicator{
     try{
       const data = await response.json();
       console.log(`POST to ${url} was successful`);
+      //return the data from the post request
       return data;
     }catch(error){
       console.log("error",error);
@@ -28,6 +30,7 @@ export default class Communicator{
   }
 
   async  Get(url,data){
+    //Makes a get request to the passed url with the passed data
     console.log(`Getting from ${url}`);
 
     const response = await fetch(url,{
@@ -46,6 +49,7 @@ export default class Communicator{
     try{
       const data = await response.json();
       console.log(`GET from ${url} was successful`);
+      //return the data from the get request
       return data;
     }catch(error){
       console.log("error",error);

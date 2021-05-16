@@ -13,6 +13,7 @@ export default class DestinationManager{
   }
 
   async get(newDestination){
+    //Gets a new destination from the server with the passed data.
     console.log(`Adding destination ${newDestination.placeName} to Trip ID ${this.tripID}`)
 
     return await this.communicator.Post("http://localhost:3033/getDestination",newDestination).then(data =>{
@@ -21,39 +22,31 @@ export default class DestinationManager{
     })
   }
 
-  /*
-  async remove(destinationID){
-    console.log(`Removing destination ID ${destinationID} from Trip ID ${this.tripID}`)
-    let requestData = {
-      tripID: this.tripID,
-      destinationID: destinationID
-    }
-    return await this.communicator.Post("http://localhost:3033/removeTripDestination",requestData).then(data =>{
-      this.destinations.splice(data.destinationIndex,1);
-      return
-    })
-  }*/
-
   init(document){
+    //Get the required elements
     var destinationsContent = document.getElementsByClassName("destinations-content")[0];
     var enterButton = document.getElementsByClassName("destinations-enter")[0];
-
     var destinationInput =  document.getElementsByClassName("destinations-input")[0];
+
+    //load any saved destinations
     this.load(destinationsContent);
 
+    //Initialize buttons
     const buttonClick = this.onEnterClick.bind(null,this,destinationsContent,destinationInput);
     enterButton.addEventListener("click",buttonClick);
   }
 
   load(destinationsContent){
-    let flights = this.destinations;
+    let destinations = this.destinations;
 
-    for(var i = 0 ; i < flights.length; i++){
-      this.insert(destinationsContent,flights[i])
+    //loop through the saved destinations and insert them into the document
+    for(var i = 0 ; i < destinations.length; i++){
+      this.insert(destinationsContent,destinations[i])
     }
   }
 
   insert(content,destination){
+    //inserts and new destination into the document
     var htmlString = `
     <div class="destination">
       <div class="destination-info">
@@ -63,24 +56,27 @@ export default class DestinationManager{
       <div class="weather">
       </div>
     </div>`
+    //Gte the new element
     content.insertAdjacentHTML("afterbegin",htmlString);
     var itemElement = content.firstChild.nextSibling;
 
+    //Init the remove button
     var removeButton = itemElement.getElementsByClassName("destination-remove")[0];
-
     var onRemoveClick = this.onRemoveClick.bind(null,this,destination.id)
-
     removeButton.addEventListener("click",onRemoveClick)
 
+    //Initialize the weather for the destination
     this.insertWeather(itemElement,destination.weatherForecast.data);
     return itemElement
   }
 
   insertWeather(itemElement,weatherData){
+    //Initialize the weather data and elements
     let weatherElement = itemElement.getElementsByClassName("weather")[0];
     let timezone = weatherData.timezone;
     let today = new Date(new Date().toLocaleString("en-US", {timeZone: timezone}));
 
+    //Loop through the data and insert a new weather element
     for(let i = 0; i < weatherData.length; i++){
       let weather = weatherData[i];
       let day = addDay(today,i);
@@ -99,6 +95,7 @@ export default class DestinationManager{
   }
 
   onEnterClick(manager,content,destinationInput){
+    //Creates a new destination on pressing the enter button
     var newDestination = {
       placeName: destinationInput.value,
       countryCode: manager.countryCode,
@@ -110,6 +107,7 @@ export default class DestinationManager{
   }
 
   onRemoveClick(manager,destinationID,event){
+    //Removes destination on pressing it's remove button
     var element = event.target.parentElement;
 
     element.remove();

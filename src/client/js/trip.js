@@ -21,6 +21,7 @@ export default class Trip{
   }
 
   insert(document,parent){
+    //Inserts a new trip into the document
     let htmlString = `
     <div id="${this.data.id}"class="trip">
       <div class="trip-header">
@@ -109,10 +110,15 @@ export default class Trip{
     </div>`
 
     parent.insertAdjacentHTML("afterbegin",htmlString);
+
+    //Insert the trip's weather
     this.insertWeather(document)
+
+    //Initialize the trip's button
     this.tripElement = document.getElementById(this.data.id);
     this.removeButton = this.tripElement.getElementsByClassName("trip-remove-button")[0];
 
+    //Initializes all of the data managers
     this.packingListManager.init(document)
     this.todoListManager.init(document)
     this.hotelManager.init(document)
@@ -121,11 +127,13 @@ export default class Trip{
   }
 
   insertWeather(document){
+     //Initialize the weather data and elements
     let weatherElement = document.getElementsByClassName("weather")[0];
     let weatherData = this.data.weatherForecast.data;
     let timezone = this.data.weatherForecast.timezone;
     let today = new Date(new Date().toLocaleString("en-US", {timeZone: timezone}));
 
+    //Loop through the data and insert a new weather element
     for(let i = 0; i < weatherData.length; i++){
       let weather = weatherData[i];
       let day = addDay(today,i)
